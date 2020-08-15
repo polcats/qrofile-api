@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+let mongooseHidden = require('mongoose-hidden')();
 
 const userSchema = new mongoose.Schema({
   firstName: {
@@ -17,18 +18,20 @@ const userSchema = new mongoose.Schema({
   },
   mobileNumber: {
     type: String,
-    required: 'Mobile number is required!',
+    required: [true, 'Invalid mobile number'],
     trim: true,
-    minlength: 10,
-    maxlength: 11,
+    minlength: [10, 'Mininum characters not reached (10)!'],
+    maxlength: [11, 'Maximum characters exceeded (11)!'],
   },
   password: {
     type: String,
     required: true,
     trim: true,
+    hide: true,
     minlength: 6,
     maxlength: 1024,
   },
 });
+userSchema.plugin(mongooseHidden);
 
 module.exports = mongoose.model('User', userSchema);
