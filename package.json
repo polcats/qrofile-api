@@ -1,0 +1,15 @@
+{
+  "name": "qrofile-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:polcats/qrofile-api.git",
+  "author": "Paul Catalan",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
