@@ -1,3 +1,4 @@
+const HttpStatus = require('http-status-codes');
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -10,7 +11,7 @@ const {
 router.post('/register', async (req, res) => {
   const { error } = validateRegistration(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
     return;
   }
 
@@ -18,7 +19,7 @@ router.post('/register', async (req, res) => {
     mobileNumber: req.body.mobileNumber,
   });
   if (mobileExists) {
-    res.status(400).send('Mobile number is already in use.');
+    res.status(HttpStatus.CONFLICT).send('Mobile number is already in use.');
     return;
   }
 
@@ -35,19 +36,20 @@ router.post('/register', async (req, res) => {
 
   try {
     let result = await user.save();
-    res.status(200).send({
+    res.status(HttpStatus.CREATED).send({
       ...result.toObject(),
       _id: result._id,
     });
   } catch (error) {
-    res.status(400).send(error);
+    console.debug(error);
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
   }
 });
 
 router.post('/login', async (req, res) => {
   const { error } = validateLogin(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
     return;
   }
 
@@ -55,19 +57,19 @@ router.post('/login', async (req, res) => {
     mobileNumber: req.body.mobileNumber,
   });
   if (!user) {
-    res.status(400).send('Mobile number does not exist.');
+    res.status(HttpStatus.BAD_REQUEST).send('Mobile number does not exist.');
     return;
   }
 
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) {
-    res.status(400).send('Incorrect password.');
+    res.status(HttpStatus.BAD_REQUEST).send('Incorrect password.');
     return;
   }
 
   const token = jwt.sign({ _id: user._id }, process.env.SECRET);
 
-  res.status(200).send({
+  res.status(HttpStatus.OK).send({
     ...user.toObject(),
     _id: user._id,
     token,

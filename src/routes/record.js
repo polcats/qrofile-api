@@ -1,3 +1,4 @@
+const HttpStatus = require('http-status-codes');
 const router = require('express').Router();
 const verify = require('../services/verifyToken');
 const Record = require('../models/Record');
@@ -26,20 +27,20 @@ router.get('/records', verify, async (req, res) => {
           }
         }),
       );
-      res.status(200).send(connections);
+      res.status(HttpStatus.OK).send(connections);
       return;
     }
 
-    res.status(200).send([]);
+    res.status(HttpStatus.OK).send([]);
   } catch (error) {
-    res.status(400).send([]);
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
   }
 });
 
 router.post('/records', verify, async (req, res) => {
   const { error } = validateRecord(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
     return;
   }
 
@@ -51,7 +52,7 @@ router.post('/records', verify, async (req, res) => {
   });
 
   if (recordExists) {
-    res.status(400).send('Record already exists.');
+    res.status(HttpStatus.CONFLICT).send('Record already exists.');
     return;
   }
 
@@ -64,19 +65,19 @@ router.post('/records', verify, async (req, res) => {
 
   try {
     let result = await record.save();
-    res.status(200).send({
+    res.status(HttpStatus.OK).send({
       ...result.toObject(),
       _id: result._id,
     });
   } catch (error) {
-    res.status(400).send(error);
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
   }
 });
 
 router.delete('/records', verify, async (req, res) => {
   const { error } = validateDelete(req.body);
   if (error) {
-    res.status(400).send(error.details[0].message);
+    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
     return;
   }
 
@@ -84,9 +85,9 @@ router.delete('/records', verify, async (req, res) => {
     let result = await Record.findByIdAndDelete({
       _id: req.body.id,
     });
-    res.status(200).send();
+    res.status(HttpStatus.OK).send();
   } catch (error) {
-    res.status(400).send(error);
+    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
   }
 });
 

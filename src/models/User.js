@@ -29,6 +29,36 @@ const userSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
+  socials: {
+    facebook: {
+      type: String,
+      required: false,
+    },
+    twitter: {
+      type: String,
+      required: false,
+    },
+    instagram: {
+      type: String,
+      required: false,
+    },
+    linkedIn: {
+      type: String,
+      required: false,
+    },
+    github: {
+      type: String,
+      required: false,
+    },
+    stackOverflow: {
+      type: String,
+      required: false,
+    },
+    website: {
+      type: String,
+      required: false,
+    },
+  },
 });
 userSchema.plugin(mongooseHidden);
 
