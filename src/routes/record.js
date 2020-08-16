@@ -15,6 +15,7 @@ router.get('/records', verify, async (req, res) => {
     });
 
     const connections = [];
+    // const deletedConnections = [];
     if (records) {
       await Promise.all(
         records.map(async (item) => {
@@ -24,9 +25,22 @@ router.get('/records', verify, async (req, res) => {
           if (user) {
             connections.push({ ...user.toObject(), _id: item._id });
             console.log(user);
+          } else {
+            // deletedConnections.push(item._id);
+            connections.push({ _id: item._id, isDeleted: true });
           }
         }),
       );
+
+      // If a connection decided to delete their profile, auto delete record.
+      // console.log('Number of deleted connections:' + deletedConnections.length);
+      // if (deletedConnections.length) {
+      //   await Promise.all(
+      //     deletedConnections.map(async (item) => {
+      //       await Record.findByIdAndDelete({ _id: item._id });
+      //     }),
+      //   );
+      // }
       res.status(HttpStatus.OK).send(connections);
       return;
     }
@@ -82,7 +96,7 @@ router.delete('/records', verify, async (req, res) => {
   }
 
   try {
-    let result = await Record.findByIdAndDelete({
+    await Record.findByIdAndDelete({
       _id: req.body.id,
     });
     res.status(HttpStatus.OK).send();
