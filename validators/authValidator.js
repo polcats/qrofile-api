@@ -12,13 +12,8 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).max(50).trim().required(),
 });
 
-validateRegistration = (reqBody) => {
-  return userSchema.validate(reqBody);
-};
-
-validateLogin = (reqBody) => {
-  return loginSchema.validate(reqBody);
-};
+validateRegistration = (reqBody) => userSchema.validate(reqBody);
+validateLogin = (reqBody) => loginSchema.validate(reqBody);
 
 module.exports.validateRegistration = validateRegistration;
 module.exports.validateLogin = validateLogin;
