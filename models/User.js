@@ -5,23 +5,17 @@ const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 3,
-    maxlength: 50,
   },
   lastName: {
     type: String,
     required: true,
-    trim: true,
-    minlength: 3,
-    maxlength: 50,
   },
   mobileNumber: {
     type: String,
-    required: [true, 'Invalid mobile number'],
+    required: true,
     trim: true,
-    minlength: [10, 'Mininum characters not reached (10)!'],
-    maxlength: [11, 'Maximum characters exceeded (11)!'],
+    minlength: 10,
+    maxlength: 11,
   },
   password: {
     type: String,
