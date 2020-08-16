@@ -2,8 +2,8 @@ const env = require('dotenv');
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const auth = require('./routes/auth');
-const records = require('./routes/record');
+const auth = require('./src/routes/auth');
+const records = require('./src/routes/record');
 
 env.config();
 mongoose.connect(
