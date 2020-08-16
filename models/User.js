@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
     maxlength: 1024,
   },
+  joinedDate: {
+    type: Date,
+    required: true,
+  },
 });
 userSchema.plugin(mongooseHidden);
 
