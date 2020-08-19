@@ -11,6 +11,7 @@ const auth = (req, res, next) => {
   try {
     const verified = jwt.verify(token, process.env.SECRET);
     req.user = verified;
+    console.log('Verified is ' + JSON.stringify(verified));
     next();
   } catch (error) {
     res.status(HttpStatus.BAD_REQUEST).send('Invalid token.');

@@ -96,10 +96,17 @@ router.delete('/records', verify, async (req, res) => {
   }
 
   try {
-    await Record.findByIdAndDelete({
-      _id: req.body.id,
+    let record = await Record.findById({
+      _id: req.body.id, // id of record to delete
     });
-    res.status(HttpStatus.OK).send();
+
+    if (record.owner !== req.user._id) {
+      console.log('No permission!', record.owner, req.user._id);
+      res.status(HttpStatus.FORBIDDEN).send("You don't have permission.");
+      return;
+    }
+
+    res.status(HttpStatus.OK).send(record);
   } catch (error) {
     res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
   }
