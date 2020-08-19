@@ -11,7 +11,7 @@ const {
 router.get('/records', verify, async (req, res) => {
   try {
     const records = await Record.find({
-      owner: req.body.owner,
+      owner: req.user._id,
     });
 
     const connections = [];
