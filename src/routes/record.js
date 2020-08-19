@@ -100,6 +100,7 @@ router.delete('/records', verify, async (req, res) => {
       _id: req.body.id, // id of record to delete
     });
 
+    // check if record owner is token owner
     if (record.owner !== req.user._id) {
       console.log('No permission!', record.owner, req.user._id);
       res.status(HttpStatus.FORBIDDEN).send("You don't have permission.");

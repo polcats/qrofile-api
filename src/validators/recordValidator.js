@@ -9,7 +9,6 @@ const recordSchema = Joi.object({
 
 const deleteRecordSchema = Joi.object({
   id: Joi.string().required(),
-  owner: Joi.string().required(),
 });
 
 validateRecord = (reqBody) => recordSchema.validate(reqBody);
