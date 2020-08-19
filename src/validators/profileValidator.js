@@ -1,7 +1,6 @@
 const Joi = require('@hapi/joi');
 
 const profileSchema = Joi.object({
-  id: Joi.string().required(),
   newProfile: Joi.object({
     firstName: Joi.string().min(2).max(50).trim(),
     lastName: Joi.string().min(2).max(50).trim(),

@@ -23,7 +23,7 @@ router.put('/profile', verify, async (req, res) => {
 
   const updatedUser = await User.findOneAndUpdate(
     {
-      _id: req.body.id,
+      _id: req.user._id,
     },
     {
       ...req.body.newProfile,
