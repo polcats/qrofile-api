@@ -52,6 +52,13 @@ router.get('/records', verify, async (req, res) => {
 });
 
 router.post('/records', verify, async (req, res) => {
+  req.body.owner = req.user._id;
+
+  if (req.body.user._id === req.body.owner) {
+    res.status(HttpStatus.BAD_REQUEST).send('You cannot record yourself.');
+    return;
+  }
+
   const { error } = validateRecord(req.body);
   if (error) {
     res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
