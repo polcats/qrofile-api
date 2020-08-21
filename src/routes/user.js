@@ -36,10 +36,12 @@ router.put('/profile', verify, async (req, res) => {
   const mobileExists = await User.findOne({
     mobileNumber: req.body.mobileNumber,
   });
-  if (mobileExists && mobileExists._id !== req.user_id) {
-    res
-      .status(HttpStatus.CONFLICT)
-      .send({ error: 'Mobile number is already in use.' });
+
+  if (mobileExists && mobileExists._id != req.user._id) {
+    // Did not use !== to avoid casting..
+    res.status(HttpStatus.CONFLICT).send({
+      error: 'Mobile number is already in use.',
+    });
     return;
   }
 
