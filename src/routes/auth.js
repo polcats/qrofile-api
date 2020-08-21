@@ -11,7 +11,9 @@ const {
 router.post('/register', async (req, res) => {
   const { error } = validateRegistration(req.body);
   if (error) {
-    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .send({ error: error.details[0].message });
     return;
   }
 
@@ -19,7 +21,9 @@ router.post('/register', async (req, res) => {
     mobileNumber: req.body.mobileNumber,
   });
   if (mobileExists) {
-    res.status(HttpStatus.CONFLICT).send('Mobile number is already in use.');
+    res
+      .status(HttpStatus.CONFLICT)
+      .send({ error: 'Mobile number is already in use.' });
     return;
   }
 
@@ -44,14 +48,18 @@ router.post('/register', async (req, res) => {
     });
   } catch (error) {
     console.debug(error);
-    res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    res
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .send({ error: 'Failed to register.' });
   }
 });
 
 router.post('/login', async (req, res) => {
   const { error } = validateLogin(req.body);
   if (error) {
-    res.status(HttpStatus.BAD_REQUEST).send(error.details[0].message);
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .send({ error: error.details[0].message });
     return;
   }
 
@@ -59,13 +67,15 @@ router.post('/login', async (req, res) => {
     mobileNumber: req.body.mobileNumber,
   });
   if (!user) {
-    res.status(HttpStatus.BAD_REQUEST).send('Mobile number does not exist.');
+    res
+      .status(HttpStatus.BAD_REQUEST)
+      .send({ error: 'Mobile number is not registered.' });
     return;
   }
 
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) {
-    res.status(HttpStatus.BAD_REQUEST).send('Incorrect password.');
+    res.status(HttpStatus.BAD_REQUEST).send({ error: 'Incorrect password.' });
     return;
   }
 

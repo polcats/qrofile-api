@@ -1,25 +1,33 @@
 const mongoose = require('mongoose');
+const { boolean } = require('@hapi/joi');
 let mongooseHidden = require('mongoose-hidden')();
+
+const SocialAccount = {
+  name: {
+    type: String,
+    required: false,
+  },
+  enabled: {
+    type: Boolean,
+  },
+  type: Object,
+};
 
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true,
   },
   lastName: {
     type: String,
-    required: true,
   },
   mobileNumber: {
     type: String,
-    required: true,
     trim: true,
     minlength: 10,
     maxlength: 11,
   },
   password: {
     type: String,
-    required: true,
     trim: true,
     hide: true,
     minlength: 6,
@@ -27,36 +35,17 @@ const userSchema = new mongoose.Schema({
   },
   joinedDate: {
     type: Date,
-    required: true,
   },
-  socials: {
-    facebook: {
+  facebook: SocialAccount,
+  twitter: SocialAccount,
+  instagram: SocialAccount,
+  linkedIn: SocialAccount,
+  github: SocialAccount,
+  stackOverflow: SocialAccount,
+  website: SocialAccount,
+  settings: {
+    theme: {
       type: String,
-      required: false,
-    },
-    twitter: {
-      type: String,
-      required: false,
-    },
-    instagram: {
-      type: String,
-      required: false,
-    },
-    linkedIn: {
-      type: String,
-      required: false,
-    },
-    github: {
-      type: String,
-      required: false,
-    },
-    stackOverflow: {
-      type: String,
-      required: false,
-    },
-    website: {
-      type: String,
-      required: false,
     },
   },
 });

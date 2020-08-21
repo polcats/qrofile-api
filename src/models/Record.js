@@ -5,6 +5,9 @@ const recordSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  date: {
+    type: Date,
+  },
   user: {
     _id: {
       type: String,
