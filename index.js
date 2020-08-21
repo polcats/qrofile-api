@@ -18,4 +18,4 @@ app.use('/api/user', auth);
 app.use('/api/user', user);
 app.use('/api', records);
 
-app.listen(3000, () => console.log('Server is running.'));
+app.listen(process.env.PORT || 90, () => console.log('Server is running.'));
