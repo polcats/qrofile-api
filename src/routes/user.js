@@ -4,6 +4,18 @@ const verify = require('../services/verifyToken');
 const User = require('../models/User');
 const validateProfile = require('../validators/profileValidator');
 
+router.delete('/profile', verify, async (req, res) => {
+  const user = await User.findOneAndDelete({
+    _id: req.user._id,
+  });
+  if (!user) {
+    res.status(HttpStatus.BAD_REQUEST).send({ error: 'User is not found.' });
+    return;
+  }
+
+  res.status(HttpStatus.OK).send();
+});
+
 router.get('/profile', verify, async (req, res) => {
   const user = await User.findOne({
     _id: req.user._id,
