@@ -2,16 +2,22 @@ const HttpStatus = require('http-status-codes');
 const router = require('express').Router();
 const verify = require('../services/verifyToken');
 const User = require('../models/User');
+const Records = require('../models/Record');
 const validateProfile = require('../validators/profileValidator');
 
 router.delete('/profile', verify, async (req, res) => {
   const user = await User.findOneAndDelete({
     _id: req.user._id,
   });
+
   if (!user) {
     res.status(HttpStatus.BAD_REQUEST).send({ error: 'User is not found.' });
     return;
   }
+
+  await Records.deleteMany({
+    owner: req.user._id,
+  });
 
   res.status(HttpStatus.OK).send();
 });
